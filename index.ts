@@ -63,7 +63,6 @@ class App {
       //         })
       //         .catch(error => {
       //             console.log(error);
-
       //         })
       // }
     });
