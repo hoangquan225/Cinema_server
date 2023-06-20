@@ -18,6 +18,24 @@ export default class AppConfig {
   static STATUS_FAIL = -1;
   static STATUS_NO_EXIST = 2;
 
+  static FilmsStatus = Object.freeze({
+    DRAFT: -1,
+    GOING_ON: 0,
+    COMING: 1,
+    FINISH: 2,
+  });
+
+  static FilmCategories = Object.freeze({
+    ROMANCE: 'Romance', // Phim lãng mạn
+    ADVENTURE: 'Adventure', // phim phiêu lưu
+    COMEDY: 'Comedy', // Phim hài
+    DOCUMENTARY: 'Documentary', // Phim tài liệu
+    ACTION: 'Action', // Phim hành động
+    SCIENCE_FICTION: 'Science fiction', // Phim khoa học viễn tưởng
+    WAR: 'War', // Phim về chiến tranh
+    DRAFT: 'DRAFT',
+  });
+
   // user role
   static ROLE_ADMIN = 0;
   static ROLE_USER = 1;

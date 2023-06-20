@@ -1,4 +1,3 @@
-import { AppError } from '../common/AppError';
 import AppConfig from '../common/config';
 import { UserModel } from '../database/users';
 import { UserInfo } from '../models/user';
@@ -6,14 +5,14 @@ import { decrypt, encodeSHA256Pass, encrypt } from '../utils/crypto';
 import { jwtDecodeToken, jwtEncode } from '../utils/jwtToken';
 
 class AuthServices {
-  private processPass(userObject: { account: string; password: string }) {
-    const decryptedResult = decrypt(userObject.password);
-    const encodedPassword = encodeSHA256Pass(
-      userObject.account,
-      decryptedResult
-    );
-    return encodedPassword;
-  }
+  // private processPass(userObject: { account: string; password: string }) {
+  //   const decryptedResult = decrypt(userObject.password);
+  //   const encodedPassword = encodeSHA256Pass(
+  //     userObject.account,
+  //     decryptedResult
+  //   );
+  //   return encodedPassword;
+  // }
 
   private createToken(user: UserInfo) {
     let userInfo = new UserInfo(user);
@@ -24,19 +23,19 @@ class AuthServices {
   }
 
   login = async (body: {
-    account: string;
+    email: string;
     password: string;
     userRole?: number;
   }): Promise<UserInfo> => {
     // const passEncode = this.processPass(body);
-    const passEncode = encodeSHA256Pass(body.account, body.password);
+    const passEncode = encodeSHA256Pass(body.email, body.password);
 
     let userInfo = new UserInfo({ ...body, password: body.password });
     try {
       const checkUserAcc: UserInfo | null = await UserModel.findOne(
         typeof body.userRole === 'number'
-          ? { account: userInfo.account, userRole: body.userRole }
-          : { account: userInfo.account }
+          ? { email: userInfo.email, userRole: body.userRole }
+          : { email: userInfo.email }
       );
       if (checkUserAcc) {
         if (passEncode === checkUserAcc.password) {
@@ -57,22 +56,11 @@ class AuthServices {
     }
   };
 
-  register = async (body: UserInfo, next: any): Promise<any> => {
+  register = async (body: UserInfo): Promise<any> => {
     let userInfo = new UserInfo(body);
     try {
-      const account = userInfo.account?.trim().toLowerCase();
+      const email = userInfo.email?.trim().toLowerCase();
       const password = userInfo.password;
-      const email = userInfo.email;
-
-      const checkUserAcc: UserInfo | null = await UserModel.findOne({
-        account,
-      });
-      if (checkUserAcc)
-        return {
-          ...userInfo,
-          loginCode: AppConfig.LOGIN_ACCOUNT_IS_USED,
-          message: 'LOGIN_ACCOUNT_IS_USED',
-        };
 
       const checkUserEmail: UserInfo | null = await UserModel.findOne({
         email,
@@ -86,7 +74,7 @@ class AuthServices {
         };
 
       // const passEncode = this.processPass({ account, password });
-      const passEncode = encodeSHA256Pass(account, password);
+      const passEncode = encodeSHA256Pass(email, password);
 
       // luu vao db
       const newUserInfo = {
@@ -126,4 +114,5 @@ class AuthServices {
   //     }
   //   };
 }
+
 export { AuthServices };

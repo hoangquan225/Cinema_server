@@ -1,11 +1,12 @@
 import express from 'express';
-import { AuthServices } from '../services/auth';
+import { AuthServices } from '../services/authServices';
 import Endpoint from '../common/endpoint';
 import asyncHandler from '../utils/async_handle';
 import { UserInfo } from '../models/user';
 import { BadRequestError } from '../common/errors';
 import AppConfig from '../common/config';
 import { getCookieOptions } from '../utils/cookie';
+import { isValidEmail } from '../utils/helpers';
 // import { isValidEmail } from "../../submodule/utils/validation";
 // import { BadRequestError } from "../../common/errors";
 // import TTCSconfig from "../../submodule/common/config";
@@ -18,18 +19,18 @@ const authService = new AuthServices();
 authRouter.post(
   Endpoint.LOGIN,
   asyncHandler(async (req, res) => {
-    const body: { account: string; password: string; userRole?: number } =
+    const body: { email: string; password: string; userRole?: number } =
       req.body;
-    if (!body.account || !body.password) {
-      throw res.json(new BadRequestError('invalid account or password'));
-    } else {
-      const { loginCode, token, ...userLogin } = await authService.login(body);
-      return res.json({
-        loginCode,
-        userLogin,
-        token,
-      });
+    if (!body.email || !body.password) {
+      throw res.json(new BadRequestError('invalid email or password'));
     }
+
+    const { loginCode, token, ...userLogin } = await authService.login(body);
+    return res.json({
+      loginCode,
+      userLogin,
+      token,
+    });
   })
 );
 
@@ -48,11 +49,11 @@ authRouter.post(
   asyncHandler(async (req, res, next) => {
     const body = <UserInfo>req.body;
 
-    if (!body.account || !body.password)
-      throw res.json(new BadRequestError('invalid account or password'));
+    if (!isValidEmail(body?.email || '') || !body.password)
+      throw res.json(new BadRequestError('invalid email or password'));
 
     const { loginCode, token, message, ...registerData } =
-      await authService.register(body, next);
+      await authService.register(body);
 
     if (loginCode === AppConfig.LOGIN_SUCCESS) {
       res.cookie('token', token, { ...getCookieOptions() });

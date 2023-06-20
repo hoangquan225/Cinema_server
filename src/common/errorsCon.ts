@@ -1,8 +1,8 @@
-import { AppError } from './AppError';
+import { ServerError } from './errors';
 
 const handleCastErrorDB = (err: any) => {
   const message = `Invalid ${err.path}: ${err.value}.`;
-  return new AppError(message, 400);
+  return new ServerError(400, message);
 };
 
 const handleDuplicateFieldsDB = (err: any) => {
@@ -10,13 +10,13 @@ const handleDuplicateFieldsDB = (err: any) => {
   console.log(value);
 
   const message = `Duplicate field value: ${value}. Please use another value!`;
-  return new AppError(message, 400);
+  return new ServerError(400, message);
 };
 const handleValidationErrorDB = (err: any) => {
   const errors = Object.values(err.errors).map((el: any) => el.message);
 
   const message = `Invalid input data. ${errors.join('. ')}`;
-  return new AppError(message, 400);
+  return new ServerError(400, message);
 };
 
 const sendErrorDev = (err: any, res: any) => {

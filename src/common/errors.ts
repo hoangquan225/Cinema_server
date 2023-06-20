@@ -2,12 +2,16 @@ export class ServerError extends Error {
   message: string;
   status: number;
   data?: any;
+  isOperational?: any;
 
   constructor(status: number, message: string = '', data?: any) {
     super();
     this.status = status;
     this.message = message;
     this.data = data;
+    this.isOperational = true;
+
+    Error.captureStackTrace(this, this.constructor);
   }
 }
 
