@@ -1,7 +1,7 @@
 import { sign, verify } from 'jsonwebtoken';
-// import { jwtSecret, TOKEN_EXPIRED } from '../constrain';
+import { TOKEN_EXPIRED } from './constant';
 
-const { JWT_SECRET = 'appcinema_secret', TOKEN_EXPIRED } = process.env;
+const { JWT_SECRET = 'appcinema_secret' } = process.env;
 
 export type TokenData = {
   _id: string;
@@ -10,7 +10,7 @@ export type TokenData = {
   from?: number;
 };
 
-export function jwtEncode(userId: any, expiresIn = Number(TOKEN_EXPIRED)) {
+export function jwtEncode(userId: any, expiresIn = TOKEN_EXPIRED) {
   const payload: TokenData = { _id: userId };
 
   return sign(payload, JWT_SECRET, { expiresIn });
@@ -18,7 +18,7 @@ export function jwtEncode(userId: any, expiresIn = Number(TOKEN_EXPIRED)) {
 
 export function jwtDecodeToken(token: string) {
   try {
-    const decoded: any = verify(token, `${JWT_SECRET}`);
+    const decoded: any = verify(token, JWT_SECRET);
     return decoded;
   } catch (err) {
     return null;
