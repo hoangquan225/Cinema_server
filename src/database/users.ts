@@ -1,22 +1,22 @@
-import mongoose, { Document, Model, model, Types } from "mongoose";
-// import { departmentTable } from "./departments";
-import { UserInfo } from "../models/user";
-export const userTableName = "User";
+import mongoose, { Document, Model, model, Types } from 'mongoose';
+import { UserInfo } from '../models/user';
+export const userTableName = 'User';
 interface IUserSchema extends Model<UserInfoDoc> {}
+
 export interface UserInfoDoc extends UserInfo, Document {
   _id: string;
 }
 
 const UserSchema = new mongoose.Schema<UserInfoDoc, IUserSchema>(
   {
-    account: { type: String, lowercase: true },
+    // account: { type: String, lowercase: true },
     name: String,
     avatar: String,
     email: String,
     password: String,
-    phoneNumber: { type: String, default: "" },
-    address: { type: String, default: "" },
-    googleId: { type: String, default: "" },
+    phoneNumber: { type: String, default: '' },
+    address: { type: String, default: '' },
+    googleId: { type: String, default: '' },
     birth: { type: Number, default: 0 },
     gender: { type: Number, default: 0 },
     registerDate: { type: Number, default: 0 },
