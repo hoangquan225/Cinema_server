@@ -9,7 +9,7 @@ export class ServerError extends Error {
     this.status = status;
     this.message = message;
     this.data = data;
-    this.isOperational = true;
+    // this.isOperational = true;
 
     Error.captureStackTrace(this, this.constructor);
   }

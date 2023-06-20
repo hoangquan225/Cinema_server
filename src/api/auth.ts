@@ -7,11 +7,6 @@ import { BadRequestError } from '../common/errors';
 import AppConfig from '../common/config';
 import { getCookieOptions } from '../utils/cookie';
 import { isValidEmail } from '../utils/helpers';
-// import { isValidEmail } from "../../submodule/utils/validation";
-// import { BadRequestError } from "../../common/errors";
-// import TTCSconfig from "../../submodule/common/config";
-// import { getCookieOptions } from "../../utils/cookie";
-// import Endpoint from "../../submodule/common/endpoint";
 
 const authRouter = express.Router();
 
@@ -21,7 +16,8 @@ authRouter.post(
   asyncHandler(async (req, res) => {
     const body: { email: string; password: string; userRole?: number } =
       req.body;
-    if (!body.email || !body.password) {
+
+    if (!isValidEmail(body?.email || '') || !body.password) {
       throw res.json(new BadRequestError('invalid email or password'));
     }
 
@@ -67,7 +63,6 @@ authRouter.post(
 //   Endpoint.LOGIN_WITH_GOOGLE,
 //   asyncHandler(async (req, res) => {
 //     const body = req.body;
-
 //     const { loginCode, token, ...userInfo } = await authService.loginWithGoogle(
 //       body
 //     );
