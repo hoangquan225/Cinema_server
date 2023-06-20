@@ -2,6 +2,7 @@ export default class AppConfig {
   static LOGIN_FAILED = -1;
   static LOGIN_SUCCESS = 0;
   static LOGIN_ACCOUNT_IS_USED = 1;
+  static LOGIN_EMAIL_IS_USED = 7;
   static LOGIN_ACCOUNT_NOT_EXIST = 2;
   static LOGIN_WRONG_PASSWORD = 3;
   static LOGIN_WRONG_PROVIDER = 4;
