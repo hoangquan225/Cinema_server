@@ -1,4 +1,4 @@
-import { ServerError } from './errors';
+import { ServerError } from '../utils/errors';
 
 const handleCastErrorDB = (err: any) => {
   const message = `Invalid ${err.path}: ${err.value}.`;
