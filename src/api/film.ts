@@ -1,7 +1,7 @@
 import express from 'express';
 import Endpoint from '../common/endpoint';
-import asyncHandler from '../utils/async_handle';
-import { BadRequestError } from '../common/errors';
+import asyncHandler from '../utils/asyncHandler';
+import { BadRequestError } from '../utils/errors';
 import AppConfig from '../common/config';
 import { FilmServices } from '../services/filmServices';
 import { Film } from '../models/film';
@@ -9,6 +9,7 @@ import { Film } from '../models/film';
 const filmRouter = express.Router();
 
 const filmService = new FilmServices();
+
 filmRouter.post(
   Endpoint.UPDATE_FILM,
   asyncHandler(async (req, res) => {

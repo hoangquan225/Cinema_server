@@ -1,9 +1,9 @@
 import express from 'express';
 import { AuthServices } from '../services/authServices';
 import Endpoint from '../common/endpoint';
-import asyncHandler from '../utils/async_handle';
+import asyncHandler from '../utils/asyncHandler';
 import { UserInfo } from '../models/user';
-import { BadRequestError } from '../common/errors';
+import { BadRequestError } from '../utils/errors';
 import AppConfig from '../common/config';
 import { getCookieOptions } from '../utils/cookie';
 import { isValidEmail } from '../utils/helpers';

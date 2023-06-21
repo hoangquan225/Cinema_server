@@ -1,5 +1,5 @@
 import AppConfig from '../common/config';
-import { BadRequestError, FailureError } from '../common/errors';
+import { BadRequestError, FailureError } from '../utils/errors';
 import { FilmModel } from '../database/film';
 import { Film } from '../models/film';
 import { LIMIT } from '../utils/constant';

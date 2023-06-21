@@ -18,6 +18,9 @@ class UserInfo {
   lastLogin?: number;
   status?: number;
   userRole?: number;
+  passwordChangeAt: number;
+  passwordResetToken: string | undefined;
+  passwordResetExpires: number | undefined;
 
   constructor(args?: any) {
     if (!args) {
@@ -27,7 +30,7 @@ class UserInfo {
     // this.account = args.account ?? '';
     this.name = args.name ?? '';
     this.avatar = args.avatar ?? '';
-    this.loginCode = args.loginCode ?? AppConfig.LOGIN_FAILED;
+    this.loginCode = args.loginCode ?? AppConfig.LOGIN_SUCCESS;
     this.email = args.email ?? '';
     this.phoneNumber = args.phoneNumber ?? '';
     this.password = args.password ?? '';
@@ -39,7 +42,10 @@ class UserInfo {
     this.token = args.token ?? '';
     this.lastLogin = args.lastLogin ?? Date.now();
     this.status = args.status ?? 1;
-    this.userRole = args?.userRole ?? 1;
+    this.userRole = args?.userRole ?? AppConfig.ROLE_USER;
+    this.passwordChangeAt = args?.passwordChangeAt ?? Date.now();
+    this.passwordResetToken = args?.passwordResetToken ?? '';
+    this.passwordResetExpires = args?.passwordResetExpires ?? 0;
   }
 }
 
