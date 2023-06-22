@@ -19,10 +19,37 @@ filmRouter.post(
   })
 );
 
-filmRouter.post(
+filmRouter.get(
   Endpoint.GET_FILM_BY_ID,
   asyncHandler(async (req, res, next) => {
-    return res.json({});
+    const data = await filmService.getFilmById(`${req.query.id}`);
+    return res.json({
+      data,
+      status: AppConfig.STATUS_SUCCESS,
+    });
+  })
+);
+
+filmRouter.get(
+  Endpoint.SEARCH_FILM,
+  asyncHandler(async (req, res, next) => {
+    const data = await filmService.searchFilmByName(`${req.query.name}`);
+    res.json({ data, status: AppConfig.STATUS_SUCCESS });
+  })
+);
+
+filmRouter.get(
+  Endpoint.GET_ALL_FILM,
+  asyncHandler(async (req, res, next) => {
+    const { limit = 10, skip = 0 } = req.query;
+    const data = await filmService.getAllFilm({
+      limit: Number(limit),
+      skip: Number(skip),
+    });
+    return res.json({
+      data,
+      status: AppConfig.STATUS_SUCCESS,
+    });
   })
 );
 

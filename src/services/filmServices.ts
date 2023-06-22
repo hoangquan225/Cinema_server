@@ -62,13 +62,51 @@ class FilmServices {
     return deleteFilm;
   };
 
+  getFilmById = async (filmId: string) => {
+    try {
+      const film = await FilmModel.findById(filmId);
+      if (!film) {
+        throw new FailureError('Film not found');
+      }
+      return film;
+    } catch (error) {
+      throw new BadRequestError();
+    }
+  };
+
+  getAllFilm = async (body: { limit: number; skip: number }) => {
+    try {
+      const { limit, skip } = body;
+      const films = await FilmModel.find({})
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit);
+      return {
+        data: films.map((feedback) => new FilmModel(feedback)),
+      };
+    } catch (error) {
+      throw new BadRequestError();
+    }
+  };
+
+  searchFilmByName = async (name: string) => {
+    try {
+      // Tìm kiếm phim theo tên
+      const films = await FilmModel.find({
+        name: { $regex: name, $options: 'i' },
+      });
+
+      return films;
+    } catch (error) {
+      throw new BadRequestError();
+    }
+  };
   //   autoUpdateStatusFilm = async () => {
   //     if (!this.isAllowRun) return;
   //     try {
   //       const total = await FilmModel.count({
   //         status: { $ne: AppConfig.FilmsStatus.FINISH },
   //       });
-
   //       let limit = LIMIT,
   //         skip = 0,
   //         offset = limit * skip;

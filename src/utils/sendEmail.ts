@@ -11,7 +11,7 @@ const {
   EMAIL_ADDRESS = 'hoangquan225.qh@gmail.com',
 } = process.env;
 
-const sendEmail = async (email: string, subject: string, message: string) => {
+const sendEmail = async (email: string, subject: string, html: string) => {
   const transport: Transporter = nodemailer.createTransport({
     service: 'Gmail',
     host: 'smtp.gmail.io',
@@ -27,7 +27,7 @@ const sendEmail = async (email: string, subject: string, message: string) => {
     from: EMAIL_ADDRESS,
     to: email,
     subject: subject,
-    text: message,
+    html: html,
   };
 
   return await transport.sendMail(mailOptions);

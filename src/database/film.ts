@@ -1,8 +1,7 @@
 import mongoose, { Document, Model, model, Types } from 'mongoose';
 import { Film } from '../models/film';
 import AppConfig from '../common/config';
-import { FilmCategories, FilmsStatus } from '../utils/constant';
-export const fileTableName = 'film';
+export const fileTableName = 'Film';
 interface IFilmISchema extends Model<IFilmDocument> {}
 
 export interface IFilmDocument extends Film, Document {
@@ -43,7 +42,7 @@ const FilmSchema = new mongoose.Schema<IFilmDocument, IFilmISchema>(
       {
         type: Number,
         required: true,
-        default: FilmCategories.DRAFT,
+        default: AppConfig.FilmCategories.DRAFT,
       },
     ],
     director: [
@@ -85,7 +84,11 @@ const FilmSchema = new mongoose.Schema<IFilmDocument, IFilmISchema>(
     status: {
       type: Number,
       required: true,
-      default: FilmsStatus.DRAFT,
+      default: AppConfig.FilmsStatus.DRAFT,
+    },
+    schedule: {
+      type: Map,
+      of: [Number],
     },
   },
   {

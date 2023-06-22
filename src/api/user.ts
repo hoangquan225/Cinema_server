@@ -39,6 +39,14 @@ userRouter.post(
 );
 
 userRouter.post(
+  Endpoint.GET_USER_BY_ID,
+  asyncHandler(async (req, res) => {
+    const user = await userService.getUserById(`${req.query.id}`);
+    return res.json(user);
+  })
+);
+
+userRouter.post(
   Endpoint.CHANGE_PASSWORD,
   authMiddleware,
   asyncHandler(async (req: any, res) => {
@@ -59,16 +67,8 @@ userRouter.post(
   })
 );
 
-userRouter.post(
-  '/test',
-  asyncHandler(async (req: any, res) => {
-    const resetToken = crypto.randomBytes(3).toString('hex');
-
-    const reset = crypto.createHash('sha256').update(resetToken).digest('hex');
-    return res.json({ resetToken, reset });
-  })
-);
-
 userRouter.post(Endpoint.FORGOT_PASSWORD, userService.forgotPassword);
+userRouter.post(Endpoint.CHECK_RESET_PASSWORD, userService.checkResetPassword);
+userRouter.post(Endpoint.RESET_PASSWORD, userService.resetPassword);
 
 export { userRouter };
