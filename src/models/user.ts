@@ -19,8 +19,8 @@ class UserInfo {
   status?: number;
   userRole?: number;
   passwordChangeAt: number;
-  passwordResetToken: string | undefined;
-  passwordResetExpires: number | undefined;
+  passwordResetToken: string;
+  passwordResetExpires: number;
 
   constructor(args?: any) {
     if (!args) {

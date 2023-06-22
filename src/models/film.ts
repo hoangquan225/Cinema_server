@@ -1,4 +1,4 @@
-import { FilmsStatus } from '../utils/constant';
+import AppConfig from '../common/config';
 
 class Film {
   id?: string | undefined;
@@ -17,6 +17,9 @@ class Film {
   heartTotal?: number;
   status: number;
   runningTime: number;
+  schedule?: {
+    [date: number]: [number];
+  };
 
   constructor(args?: any) {
     if (!args) {
@@ -37,7 +40,8 @@ class Film {
     this.runningTime = args?.runningTime ?? 0;
     this.endTime = args?.endTime ?? 0;
     this.heartTotal = args?.heartTotal ?? 0;
-    this.status = args?.status ?? FilmsStatus.DRAFT;
+    this.status = args?.status ?? AppConfig.FilmsStatus.DRAFT;
+    this.schedule = args?.schedule ?? {};
   }
 }
 

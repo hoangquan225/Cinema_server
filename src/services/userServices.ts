@@ -20,13 +20,13 @@ export default class UserService {
   }
 
   private createPasswordResetToken = (user: UserInfo) => {
-    const resetToken = crypto.randomBytes(32).toString('hex');
+    const resetToken = crypto.randomBytes(3).toString('hex').toUpperCase();
 
     user.passwordResetToken = crypto
       .createHash('sha256')
       .update(resetToken)
       .digest('hex');
-    user.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+    user.passwordResetExpires = Date.now() + 5 * 60 * 1000;
     return resetToken;
   };
 
@@ -127,9 +127,13 @@ export default class UserService {
     }
   };
 
-  getUserById = async (body: { userId: string }): Promise<UserInfo> => {
-    const userInfo = await UserModel.findOne({ _id: body.userId });
-    return new UserInfo(userInfo);
+  getUserById = async (userId: string): Promise<UserInfo> => {
+    try {
+      const userInfo = await UserModel.findOne({ _id: userId });
+      return new UserInfo(userInfo);
+    } catch (error) {
+      throw new BadRequestError();
+    }
   };
 
   forgotPassword = asyncHandler(async (req, res, next: any) => {
@@ -139,24 +143,19 @@ export default class UserService {
       return next(new BadRequestError('Email not exits'));
     }
 
-    //2> generate the random reset token
     const resetToken = this.createPasswordResetToken(user);
     await user.save({ validateBeforeSave: false });
-
-    console.log(resetToken);
-    console.log(user);
 
     const resetURl = `${req.protocol}://${req.get(
       'host'
     )}/api/user/reset-password/${resetToken}`;
 
-    const message = `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: ${resetURl}.\n If you didn't forget your password, please ignore this email`;
-
+    const html = `<p>Here is the code to retrieve your password: <h1 style="color:#04aa6d;text-align:center;">${resetToken}</h1>Your password reset code valid for 5 minutes, Do not share it with anyone.</p>`;
     try {
       await sendEmail(
         user.email,
-        'Your password reset token (valid for 10 min)',
-        message
+        'Your password reset token (valid for 5 min)',
+        html
       );
 
       res.status(200).json({
@@ -164,11 +163,10 @@ export default class UserService {
         message: 'Token sent to email',
       });
     } catch (error) {
-      user.passwordResetToken = undefined;
-      user.passwordResetExpires = undefined;
+      user.passwordResetToken = '';
+      user.passwordResetExpires = 0;
       await user.save({ validateBeforeSave: false });
 
-      console.log(error);
       return next(
         new FailureError(
           'There was an error sending the email. Try again later!',
@@ -178,19 +176,55 @@ export default class UserService {
     }
   });
 
-  resetPassword = asyncHandler(async (req, res, next: any) => {
+  checkResetPassword = asyncHandler(async (req, res, next: any) => {
     try {
-      // 1) Get user based on the token
-      const { resetToken, password, email } = req.body;
-      // const passEncode = encrypt(req.body.password);
-
-      const newPasswordEncode = encodeSHA256Pass(email, password);
+      const { resetToken, email } = req.body;
 
       const hashesToken = crypto
         .createHash('sha256')
         .update(resetToken)
         .digest('hex');
-      // .update(req.params.token)
+
+      const user = await UserModel.findOne({
+        email: email,
+        passwordResetToken: hashesToken,
+        passwordResetExpires: { $gt: Date.now() },
+      });
+
+      if (!user) {
+        // return next(new FailureError('Token is invalid or has expired', 403));
+        return res.status(200).json({
+          status: AppConfig.STATUS_FAIL,
+          mesage: 'Token is invalid or has expired',
+          data: false,
+        });
+      }
+
+      user.passwordResetExpires =
+        Number(user.passwordResetExpires) + 5 * 60 * 1000;
+      await user.save({ validateBeforeSave: false });
+
+      return res.status(200).json({
+        status: AppConfig.STATUS_SUCCESS,
+        data: true,
+        user,
+      });
+    } catch (error) {
+      throw res.json(new BadRequestError());
+    }
+  });
+
+  resetPassword = asyncHandler(async (req, res, next: any) => {
+    try {
+      // 1) Get user based on the token
+      const { resetToken, newPassword, email } = req.body;
+      // const passEncode = encrypt(req.body.password);
+
+      const newPasswordEncode = encodeSHA256Pass(email, newPassword);
+      const hashesToken = crypto
+        .createHash('sha256')
+        .update(resetToken)
+        .digest('hex');
 
       const user = await UserModel.findOne({
         passwordResetToken: hashesToken,
@@ -199,10 +233,10 @@ export default class UserService {
 
       // 2) if token has not expired, and there is user, set the new password
       // 3) Update changedPasswordAt property for the user
-
       if (!user) {
         return next(new FailureError('Token is invalid or has expired', 403));
       }
+
       const userUpdatePassword = await UserModel.findOneAndUpdate(
         {
           passwordResetToken: hashesToken,
@@ -211,8 +245,8 @@ export default class UserService {
         {
           $set: {
             password: newPasswordEncode,
-            passwordResetToken: undefined,
-            passwordResetExpires: undefined,
+            passwordResetToken: '',
+            passwordResetExpires: 0,
             passwordChangeAt: Date.now() - 1000,
           },
         },
@@ -220,7 +254,8 @@ export default class UserService {
       );
 
       // 4) Log the user in, send JWT
-      const token = jwtEncode(user._id);
+      const token = jwtEncode(user?._id, 60 * 60 * 24 * 30);
+
       res.status(200).json({
         status: AppConfig.STATUS_SUCCESS,
         userUpdatePassword,
