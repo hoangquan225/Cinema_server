@@ -42,7 +42,7 @@ filmRouter.get(
   Endpoint.GET_ALL_FILM,
   asyncHandler(async (req, res, next) => {
     const { limit = 10, skip = 0 } = req.query;
-    const data = await filmService.getAllFilm({
+    const { data } = await filmService.getAllFilm({
       limit: Number(limit),
       skip: Number(skip),
     });

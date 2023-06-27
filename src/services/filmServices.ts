@@ -82,7 +82,7 @@ class FilmServices {
         .skip(skip)
         .limit(limit);
       return {
-        data: films.map((feedback) => new FilmModel(feedback)),
+        data: films.map((film) => new FilmModel(film)),
       };
     } catch (error) {
       throw new BadRequestError();
