@@ -221,7 +221,6 @@ export default class UserService {
       // const passEncode = encrypt(req.body.password);
 
       const newPasswordEncode = encodeSHA256Pass(email, newPassword);
-
       const hashesToken = crypto
         .createHash('sha256')
         .update(resetToken)
