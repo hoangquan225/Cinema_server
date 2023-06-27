@@ -82,7 +82,7 @@ class FilmServices {
         .skip(skip)
         .limit(limit);
       return {
-        data: films.map((feedback) => new FilmModel(feedback)),
+        data: films.map((film) => new FilmModel(film)),
       };
     } catch (error) {
       throw new BadRequestError();
@@ -127,22 +127,57 @@ class FilmServices {
     }
   };
 
+  autoUpdateStatusFilm = async () => {
+    try {
+      const count = await FilmModel.countDocuments({ status: { $ne: AppConfig.FilmsStatus.FINISH } });
+
+      const currentTime = Date.now();
+
+      let limit = LIMIT,
+        skip = 0,
+        offset = limit * skip;
+
+      while (offset <= count) {
+        const films = await FilmModel.find({ status: { $ne: AppConfig.FilmsStatus.FINISH } }).skip(skip).limit(limit);
+
+        for (const film of films) {
+          if (currentTime < film.startTime) {
+            film.status = 2;
+          } else if (currentTime >= film.startTime && currentTime <= film.endTime) {
+            film.status = 1;
+          } else {
+            film.status = 3;
+          }
+          await film.save();
+        }
+        skip++;
+        offset = limit * skip;
+      }
+
+      return { status: AppConfig.STATUS_SUCCESS }
+    } catch (error) {
+      console.error(error);
+      throw new BadRequestError()
+    }
+  };
+
+
   //   autoUpdateStatusFilm = async () => {
   //     if (!this.isAllowRun) return;
   //     try {
   //       const total = await FilmModel.count({
   //         status: { $ne: AppConfig.FilmsStatus.FINISH },
   //       });
-  //       let limit = LIMIT,
-  //         skip = 0,
-  //         offset = limit * skip;
+  // let limit = LIMIT,
+  //   skip = 0,
+  //   offset = limit * skip;
 
   //       while (offset <= total) {
   //         let films = await FilmModel.find(
   //           {},
   //           {
   //             skip,
-  //             limit,
+  //             limit, 
   //           }
   //         );
   //         for (let fiml of films) {
@@ -179,8 +214,8 @@ class FilmServices {
   //             });
   //           }
   //         }
-  //         skip++;
-  //         offset = limit * skip;
+  // skip++;
+  // offset = limit * skip;
   //       }
   //       this.isAllowRun = true;
   //     } catch (error) {
