@@ -69,4 +69,13 @@ filmRouter.post(
   })
 );
 
+
+
+filmRouter.post(
+  Endpoint.AUTO_UPDATE_STATUS_FILM,
+  asyncHandler(async (req, res, next) => {
+    const { status } = await filmService.autoUpdateStatusFilm();
+    res.json({ status });
+  })
+);
 export { filmRouter };

@@ -10,6 +10,7 @@ export default class ENDPONTAPI {
   static SEARCH_FILM = '/film/search-film';
   static GET_FILM_BY_STATUS = '/film/get-film-by-status';
   static GET_FILM_BY_CATEGORY = '/film/get-film-by-category';
+  static AUTO_UPDATE_STATUS_FILM = '/film/auto-update-status-film';
 
   //User
   static UPDATE_USER = '/user/update-user';
