@@ -93,7 +93,7 @@ class FilmServices {
     try {
       // Tìm kiếm phim theo tên
       const films = await FilmModel.find({
-        name: { $regex: name, $options: 'i' },
+        name: { $regex: `^${name}`, $options: 'i' },
       });
 
       return films;
@@ -101,6 +101,32 @@ class FilmServices {
       throw new BadRequestError();
     }
   };
+
+  getFilmByStatus = async (status: number) => {
+    try {
+      // Tìm kiếm phim theo tên
+      const films = await FilmModel.find({
+        status
+      });
+
+      return films;
+    } catch (error) {
+      throw new BadRequestError();
+    }
+  };
+
+  getFilmByCategory = async (category: number) => {
+    try {
+      // Tìm kiếm phim theo tên
+      const films = await FilmModel.find({
+        category: { $elemMatch: { $in: category } }
+      });
+      return films;
+    } catch (error) {
+      throw new BadRequestError();
+    }
+  };
+
   //   autoUpdateStatusFilm = async () => {
   //     if (!this.isAllowRun) return;
   //     try {
