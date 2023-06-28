@@ -2,7 +2,7 @@ import mongoose, { Document, Model, model, Types } from 'mongoose';
 import { Film } from '../models/film';
 import AppConfig from '../common/config';
 export const fileTableName = 'Film';
-interface IFilmISchema extends Model<IFilmDocument> {}
+interface IFilmISchema extends Model<IFilmDocument> { }
 
 export interface IFilmDocument extends Film, Document {
   id: string;
@@ -40,7 +40,7 @@ const FilmSchema = new mongoose.Schema<IFilmDocument, IFilmISchema>(
     },
     category: [
       {
-        type: Number,
+        type: String,
         required: true,
         default: AppConfig.FilmCategories.DRAFT,
       },
