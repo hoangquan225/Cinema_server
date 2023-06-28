@@ -8,7 +8,7 @@ class Film {
   content: string;
   videoUrl: string;
   thumbnail: string;
-  category: number[];
+  category: string[];
   director: string[]; // Đạo diễn
   actor: string[];
   language: string;
