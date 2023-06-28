@@ -17,9 +17,7 @@ class Film {
   heartTotal?: number;
   status: number;
   runningTime: number;
-  schedule?: {
-    [date: number]: [number];
-  };
+  schedule?: [string];
 
   constructor(args?: any) {
     if (!args) {
@@ -41,7 +39,7 @@ class Film {
     this.endTime = args?.endTime ?? 0;
     this.heartTotal = args?.heartTotal ?? 0;
     this.status = args?.status ?? AppConfig.FilmsStatus.DRAFT;
-    this.schedule = args?.schedule ?? {};
+    this.schedule = args?.schedule ?? [];
   }
 }
 

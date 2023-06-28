@@ -81,8 +81,12 @@ class FilmServices {
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit);
+
+      const count = await FilmModel.countDocuments({})
+
       return {
         data: films.map((film) => new FilmModel(film)),
+        count
       };
     } catch (error) {
       throw new BadRequestError();
@@ -115,7 +119,7 @@ class FilmServices {
     }
   };
 
-  getFilmByCategory = async (category: number) => {
+  getFilmByCategory = async (category: string) => {
     try {
       // Tìm kiếm phim theo tên
       const films = await FilmModel.find({
