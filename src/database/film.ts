@@ -86,10 +86,12 @@ const FilmSchema = new mongoose.Schema<IFilmDocument, IFilmISchema>(
       required: true,
       default: AppConfig.FilmsStatus.DRAFT,
     },
-    schedule: {
-      type: Map,
-      of: [Number],
-    },
+    schedule: [
+      {
+        type: String,
+        required: true,
+      },
+    ],
   },
   {
     versionKey: false,

@@ -42,12 +42,13 @@ filmRouter.get(
   Endpoint.GET_ALL_FILM,
   asyncHandler(async (req, res, next) => {
     const { limit = 10, skip = 0 } = req.query;
-    const { data } = await filmService.getAllFilm({
+    const { data, count } = await filmService.getAllFilm({
       limit: Number(limit),
       skip: Number(skip),
     });
     return res.json({
       data,
+      count,
       status: AppConfig.STATUS_SUCCESS,
     });
   })
@@ -64,7 +65,7 @@ filmRouter.post(
 filmRouter.post(
   Endpoint.GET_FILM_BY_CATEGORY,
   asyncHandler(async (req, res, next) => {
-    const data = await filmService.getFilmByCategory(Number(req.query.category));
+    const data = await filmService.getFilmByCategory(`${req.query.category}`);
     res.json({ data, status: AppConfig.STATUS_SUCCESS });
   })
 );

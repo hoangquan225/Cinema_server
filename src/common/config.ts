@@ -28,7 +28,7 @@ export default class AppConfig {
   });
   static FilmCategories = Object.freeze({
     DRAFT: "DRAFT",
-    ROMANCE: "DRAFT", // 1 - Phim lãng mạn
+    ROMANCE: "ROMANCE", // 1 - Phim lãng mạn
     ADVENTURE: "ADVENTURE", // 2 -  phim phiêu lưu
     COMEDY: "COMEDY", // 3 - Phim hài
     DOCUMENTARY: "DOCUMENTARY", // 4 - Phim tài liệu

@@ -23,7 +23,7 @@ export default class ENDPONTAPI {
 
   //ticket
   static CREATE_TICKET = '/ticket/create-ticket';
-  static GET_TICKET_BY_FILM_OR_DATE = '/ticket/get-ticket-by-film-or-date';
+  static GET_ALL_TICKET = '/ticket/get-all-ticket';
   static GET_SEAT_OF_SCHEDULE_BY_TICKET =
     '/ticket/get-seat-of-schedule-by-ticket';
   //upload

@@ -22,11 +22,18 @@ ticketRouter.post(
 );
 
 ticketRouter.post(
-  Endpoint.GET_TICKET_BY_FILM_OR_DATE,
+  Endpoint.GET_ALL_TICKET,
   asyncHandler(async (req, res) => {
-    await ticketService.getAllTicket();
-
-    return res.json();
+    const { limit = 10, skip = 0 } = req.query;
+    const { data, count } = await ticketService.getAllTicket({
+      limit: Number(limit),
+      skip: Number(skip),
+    });
+    return res.json({
+      data,
+      count,
+      status: AppConfig.STATUS_SUCCESS,
+    });
   })
 );
 
