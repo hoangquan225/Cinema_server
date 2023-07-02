@@ -5,6 +5,7 @@ import { BadRequestError } from '../utils/errors';
 import AppConfig from '../common/config';
 import { FilmServices } from '../services/filmServices';
 import { Film } from '../models/film';
+import { authMiddleware, isAdmin } from '../middleware/authMiddlewares';
 
 const filmRouter = express.Router();
 
@@ -12,6 +13,7 @@ const filmService = new FilmServices();
 
 filmRouter.post(
   Endpoint.UPDATE_FILM,
+  // authMiddleware, isAdmin,
   asyncHandler(async (req, res) => {
     const { data, status } = await filmService.updateFilm(new Film(req.body));
 

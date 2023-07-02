@@ -75,4 +75,4 @@ const isAdmin = asyncHandler(async (req: any, res, next: any) => {
   }
 });
 
-export { authMiddleware };
+export { authMiddleware, isAdmin };

@@ -16,6 +16,7 @@ uploadRouter.post(
   upload.single('file'),
   asyncHandler(async (req: any, res) => {
     const response = await uploadService.upload(req.file);
+    console.log({response,file: req.file, req });
     return res.json(response);
   })
 );
