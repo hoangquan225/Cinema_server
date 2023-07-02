@@ -20,6 +20,7 @@ const TicketSchema = new mongoose.Schema<ITicketDocument, ITicketISchema>(
     seat: [Number], // vi tri ghe
     showTime: { type: Number, required: true }, // ngay, gio chieu phim
     price: Number,
+    
     createdAt: Number,
   },
   {

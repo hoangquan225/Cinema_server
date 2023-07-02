@@ -17,7 +17,7 @@ const UserSchema = new mongoose.Schema<UserInfoDoc, IUserSchema>(
     phoneNumber: { type: String, default: '' },
     address: { type: String, default: '' },
     googleId: { type: String, default: '' },
-    birth: { type: Number, default: 0 },
+    birth: String,
     gender: { type: Number, default: 0 },
     registerDate: { type: Number, default: 0 },
     status: { type: Number, default: 1 },
