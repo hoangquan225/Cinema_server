@@ -74,14 +74,23 @@ class FilmServices {
     }
   };
 
-  getAllFilm = async (body: { limit: number; skip: number }) => {
+  getAllFilm = async (body: { limit: number; skip: number; status: number }) => {
     try {
-      const { limit, skip } = body;
-      const films = await FilmModel.find({})
-        .sort({ createdAt: -1 })
-        .skip(skip)
-        .limit(limit);
-
+      const { limit, skip, status } = body;
+      let films
+      if (!status) {
+        films = await FilmModel.find({})
+          .sort({ createdAt: -1 })
+          .skip(skip)
+          .limit(limit);
+      } else {
+        films = await FilmModel.find({
+          status
+        })
+          .sort({ createdAt: -1 })
+          .skip(skip)
+          .limit(limit);
+      }
       const count = await FilmModel.countDocuments({})
 
       return {

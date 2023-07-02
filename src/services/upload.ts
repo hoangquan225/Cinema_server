@@ -9,7 +9,6 @@ class UploadService {
       return res.url;
     } catch (err) {
       console.log(err);
-
       throw new BadRequestError();
     }
   };

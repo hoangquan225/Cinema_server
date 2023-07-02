@@ -11,7 +11,7 @@ class UserInfo {
   avatar?: string;
   googleId?: string;
   address?: string;
-  birth?: number;
+  birth?: string;
   gender?: number;
   registerDate?: number;
   token?: string;
