@@ -25,6 +25,7 @@ export default class AppConfig {
     GOING_ON: 1,
     COMING: 2,
     FINISH: 3,
+    DELETE: -1,
   });
   static FilmCategories = Object.freeze({
     DRAFT: "DRAFT",

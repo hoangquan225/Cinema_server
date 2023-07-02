@@ -6,10 +6,8 @@ class UploadService {
       const res = await cloudinary.uploader.upload(file.path, {
         upload_preset: 'image_upload',
       });
-      console.log({res});
       return res.url;
     } catch (err) {
-      console.log(err);
       throw new BadRequestError();
     }
   };
