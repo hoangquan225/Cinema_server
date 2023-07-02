@@ -48,7 +48,6 @@ class FilmServices {
           status: AppConfig.STATUS_SUCCESS,
         };
       } catch (error) {
-        console.log(error);
         throw new BadRequestError();
       }
     }
@@ -142,7 +141,9 @@ class FilmServices {
 
   autoUpdateStatusFilm = async () => {
     try {
-      const count = await FilmModel.countDocuments({ status: { $ne: AppConfig.FilmsStatus.FINISH } });
+      const count = await FilmModel.countDocuments({
+        status: { $ne: AppConfig.FilmsStatus.DELETE }
+      });
 
       const currentTime = Date.now();
 
@@ -151,7 +152,9 @@ class FilmServices {
         offset = limit * skip;
 
       while (offset <= count) {
-        const films = await FilmModel.find({ status: { $ne: AppConfig.FilmsStatus.FINISH } }).skip(skip).limit(limit);
+        const films = await FilmModel.find({
+          status: { $ne: AppConfig.FilmsStatus.DELETE }
+        }).skip(skip).limit(limit);
 
         for (const film of films) {
           if (currentTime < film.startTime) {

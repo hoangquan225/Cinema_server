@@ -8,7 +8,6 @@ import { UserModel } from '../database/users';
 import { UserInfo } from '../models/user';
 
 const authMiddleware = asyncHandler(async (req: any, res, next: any) => {
-  // 1) getting token and check of it's there
   let token;
   if (
     req.headers.authorization &&

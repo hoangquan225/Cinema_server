@@ -15,7 +15,6 @@ class TicketServices {
         status: AppConfig.STATUS_SUCCESS,
       };
     } catch (error) {
-      console.log(error);
       throw new BadRequestError();
     }
   };
