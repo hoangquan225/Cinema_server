@@ -97,9 +97,10 @@ class ScheduleServices {
       const isOverlap = await this.isOverlap(newStartTime, newEndTime);
 
       if (isOverlap) {
-        return res.status(400).json({
+        return res.json({
           message: 'Lịch chiếu trùng lặp',
           status: -1,
+          statusCode: 400
         });
       }
       next();
