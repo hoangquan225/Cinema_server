@@ -1,6 +1,6 @@
 import mongoose, { Document, Model, model, Types } from 'mongoose';
 import { Ticket } from '../models/ticket';
-export const fileTableName = 'ticket';
+export const fileTableName = 'Ticket';
 interface ITicketISchema extends Model<ITicketDocument> {}
 
 export interface ITicketDocument extends Ticket, Document {
@@ -17,10 +17,14 @@ const TicketSchema = new mongoose.Schema<ITicketDocument, ITicketISchema>(
       type: mongoose.Types.ObjectId,
       ref: 'Film',
     },
+    scheduleId: {
+      type: mongoose.Types.ObjectId,
+      ref: 'Schedule',
+    },
     seat: [Number], // vi tri ghe
     showTime: { type: Number, required: true }, // ngay, gio chieu phim
     price: Number,
-    paid: Boolean,
+    paid: { type: Boolean, default: false },
     createdAt: Number,
   },
   {
