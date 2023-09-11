@@ -45,7 +45,6 @@ class App {
     this.useAPI();
   }
   private useAPI() {
-    console.log("hello");
     // Web
     this.app.use(PREFIX_API, webRouters);
   }
