@@ -1,3 +1,4 @@
+import moment from 'moment';
 import AppConfig from '../common/config';
 import { ScheduleModel } from '../database/schedule';
 import { Schedule } from '../models/schedule';
@@ -75,16 +76,14 @@ class ScheduleServices {
     }
   };
 
-
-  isOverlap = async (newStartTime, newEndTime) => {
+  isOverlap = async (showDate, showTime, filmId) => {
     const scheduleList = await ScheduleModel.find()
-    for (const schedule of scheduleList) {
-      if (
-        (newStartTime >= schedule.startTime && newStartTime <= schedule.endTime) ||
-        (newEndTime >= schedule.startTime && newEndTime <= schedule.endTime) ||
-        (newStartTime <= schedule.startTime && newEndTime >= schedule.endTime)
-      ) {
-        return true;
+    for (const existingSchedule of scheduleList) {
+      if (moment(existingSchedule.showDate).format("DD/MM/YYYY") === moment(showDate).format("DD/MM/YYYY")) {
+        if (existingSchedule.showTime.some(element => showTime.includes(element))) {
+          if(existingSchedule.filmId?.toString() === filmId) return false
+          else return true;
+        }
       }
     }
     return false;
@@ -92,15 +91,14 @@ class ScheduleServices {
 
   checkOverlapMiddleware = async (req, res, next) => {
     try {
-      const newStartTime = req.body.startTime;
-      const newEndTime = req.body.endTime;
-      const isOverlap = await this.isOverlap(newStartTime, newEndTime);
-
+      const showTime = req.body.showTime;
+      const showDate = req.body.showDate;
+      const filmId = req.body.filmId;
+      const isOverlap = await this.isOverlap(showDate, showTime, filmId);
       if (isOverlap) {
         return res.json({
           message: 'Lịch chiếu trùng lặp',
           status: -1,
-          statusCode: 400
         });
       }
       next();

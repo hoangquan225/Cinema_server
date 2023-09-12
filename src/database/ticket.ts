@@ -22,7 +22,9 @@ const TicketSchema = new mongoose.Schema<ITicketDocument, ITicketISchema>(
       ref: 'Schedule',
     },
     seat: [Number], // vi tri ghe
-    showTime: { type: Number, required: true }, // ngay, gio chieu phim
+    // showTime: { type: Number, required: true }, // ngay, gio chieu phim
+    showDate: Number,
+    showTime: String,
     price: Number,
     paid: { type: Boolean, default: false },
     createdAt: Number,

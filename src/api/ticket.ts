@@ -24,12 +24,13 @@ ticketRouter.post(
 ticketRouter.post(
   Endpoint.GET_ALL_TICKET,
   asyncHandler(async (req, res) => {
-    const { limit = 50, skip = 0, filmId, userId } = req.query;
+    const { limit = 50, skip = 0, filmId, userId, scheduleId } = req.query;
     const { data, count } = await ticketService.getAllTicket({
       limit: Number(limit),
       skip: Number(skip),
       filmId: filmId,
-      userId: userId
+      userId: userId,
+      scheduleId: scheduleId,
     });
     return res.json({
       data,
@@ -42,8 +43,8 @@ ticketRouter.post(
 ticketRouter.post(
   Endpoint.GET_SEAT_OF_SCHEDULE_BY_TICKET,
   asyncHandler(async (req, res) => {
-    const { filmId, scheduleId } = req.query;
-    const data = await ticketService.getSeatOfSchedule({ filmId: `${filmId}`, scheduleId:  `${scheduleId}`});
+    const { filmId, scheduleId, showTime } = req.query;
+    const data = await ticketService.getSeatOfSchedule({ filmId, scheduleId, showTime});
 
     return res.json({ data, status: AppConfig.STATUS_SUCCESS });
   })

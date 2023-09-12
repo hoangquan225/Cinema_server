@@ -6,9 +6,10 @@ class Schedule {
     filmId: string | null;
     filmInfo: Film | null;
     romId: string | null;
-    showTime: Number;
-    startTime: Number;
-    endTime: Number;
+    showTime: [string];
+    showDate: number;
+    startTime: number;
+    endTime: number;
     nSeat: number;
     createdAt: number;
 
@@ -20,7 +21,8 @@ class Schedule {
         this.filmId = isObject(args.filmId) ? new Film(args.filmId)?.id : (args?.filmId ?? undefined);
         this.filmInfo = isObject(args.filmId) ? new Film(args.filmId) : (args?.filmInfo ?? undefined);
         this.romId = args?.romId ?? 0;
-        this.showTime = args?.showTime ?? 0;
+        this.showTime = args?.showTime ?? [];
+        this.showDate = args?.showDate ?? 0;
         this.startTime = args?.startTime ?? 0;
         this.endTime = args?.endTime ?? 0;
         this.nSeat = args?.nSeat ?? 0;

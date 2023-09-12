@@ -6,8 +6,6 @@ import { BadRequestError } from '../utils/errors';
 class TicketServices {
   createTicket = async (body: Ticket) => {
     try {
-      console.log(body);
-      
       const newTicket = await TicketModel.create({
         ...body,
         createdAt: Date.now(),
@@ -37,9 +35,9 @@ class TicketServices {
 //     console.log(tickets);
 //   });
 
-  getAllTicket = async (body: { limit: number; skip: number, filmId?: any, userId?: any, }) => {
+  getAllTicket = async (body: { limit: number; skip: number, filmId?: any, userId?: any, scheduleId?: any}) => {
     try {
-      const { limit, skip, filmId, userId } = body;
+      const { limit, skip, filmId, userId, scheduleId } = body;
       const query: any = {};
       
       if (filmId !== undefined && filmId.length !== 0) {
@@ -47,6 +45,10 @@ class TicketServices {
       }
       if (userId !== undefined && userId.length !== 0) {
         query.userId = userId;
+      }
+
+      if (scheduleId !== undefined && scheduleId.length !== 0) {
+        query.scheduleId = scheduleId;
       }
 
       const tickets = await TicketModel.find(query)
@@ -76,10 +78,10 @@ class TicketServices {
     }
   };
 
-  getSeatOfSchedule = async (body: { filmId: string; scheduleId: string }) => {
+  getSeatOfSchedule = async (body: { filmId: any; scheduleId: any, showTime: any }) => {
     try {
-      const { scheduleId, filmId } = body;
-      const tickets = await TicketModel.find({ scheduleId, filmId }); // Lấy chỉ trường "seat" của tất cả các documents
+      const { scheduleId, filmId, showTime } = body;
+      const tickets = await TicketModel.find({ scheduleId, showTime }); 
       const seatArray = tickets
         .map((ticket) => ticket.seat)
         .flat()

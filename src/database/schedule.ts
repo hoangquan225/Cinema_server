@@ -15,7 +15,8 @@ const ScheduleSchema = new mongoose.Schema<IScheduleDocument, IScheduleISchema>(
         },
         romId: String,
         // seat: [Number], // vi tri ghe
-        showTime: Number,
+        showTime: [String],
+        showDate: Number,
         startTime: Number,
         endTime: Number,
         nSeat: Number,
