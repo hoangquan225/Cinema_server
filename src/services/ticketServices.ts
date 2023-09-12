@@ -78,10 +78,10 @@ class TicketServices {
     }
   };
 
-  getSeatOfSchedule = async (body: { filmId: string; scheduleId: string }) => {
+  getSeatOfSchedule = async (body: { filmId: any; scheduleId: any, showTime: any }) => {
     try {
-      const { scheduleId, filmId } = body;
-      const tickets = await TicketModel.find({ scheduleId, filmId }); // Lấy chỉ trường "seat" của tất cả các documents
+      const { scheduleId, filmId, showTime } = body;
+      const tickets = await TicketModel.find({ scheduleId, showTime }); 
       const seatArray = tickets
         .map((ticket) => ticket.seat)
         .flat()

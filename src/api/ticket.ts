@@ -43,8 +43,8 @@ ticketRouter.post(
 ticketRouter.post(
   Endpoint.GET_SEAT_OF_SCHEDULE_BY_TICKET,
   asyncHandler(async (req, res) => {
-    const { filmId, scheduleId } = req.query;
-    const data = await ticketService.getSeatOfSchedule({ filmId: `${filmId}`, scheduleId:  `${scheduleId}`});
+    const { filmId, scheduleId, showTime } = req.query;
+    const data = await ticketService.getSeatOfSchedule({ filmId, scheduleId, showTime});
 
     return res.json({ data, status: AppConfig.STATUS_SUCCESS });
   })
