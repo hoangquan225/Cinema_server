@@ -19,21 +19,19 @@ class TicketServices {
     }
   };
 
-// TicketModel.find({})
-//   .populate({
-//     path: 'scheduleId',
-//     populate: {
-//       path: 'filmId',
-//       model: 'Film',
-//     },
-//   })
-//   .exec((err, tickets) => {
-//     if (err) {
-//       console.error(err);
-//       return;
-//     }
-//     console.log(tickets);
-//   });
+  deleteTicket = async (ticketId: any) => {
+    try {
+      const deleteTicket = await TicketModel.findOneAndDelete({
+        _id: ticketId
+      });
+      return {
+        data: deleteTicket,
+        status: deleteTicket ? AppConfig.STATUS_SUCCESS : AppConfig.STATUS_FAIL ,
+      };
+    } catch (error) {
+      throw new BadRequestError();
+    }
+  };
 
   getAllTicket = async (body: { limit: number; skip: number, filmId?: any, userId?: any, scheduleId?: any}) => {
     try {
@@ -57,6 +55,7 @@ class TicketServices {
         .limit(limit)
         .populate('filmId') 
         .populate('scheduleId')
+        .populate('userId')
         .exec();
         // .populate({
         //   path: 'scheduleId',
@@ -85,13 +84,12 @@ class TicketServices {
       const seatArray = tickets
         .map((ticket) => ticket.seat)
         .flat()
-        .sort((a, b) => a - b); // Tạo một mảng chứa giá trị seat
+        .sort((a, b) => a - b);
       return seatArray;
     } catch (error) {
       throw new BadRequestError();
     }
   };
-
 }
 
 export { TicketServices };
