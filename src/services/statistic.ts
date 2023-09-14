@@ -12,14 +12,43 @@ export default class StatisticService {
             lastLogin: { $gt: valueMonth.startOf('month').valueOf(), $lt: valueMonth.endOf('month').valueOf() }
         })
 
-        const numTicket = await TicketModel.countDocuments({
-            createdAt: { $gt: valueMonth.startOf('month').valueOf(), $lt: valueMonth.endOf('month').valueOf() }
-        })
+        // const numTicket = await TicketModel.countDocuments({
+        //     createdAt: { $gt: valueMonth.startOf('month').valueOf(), $lt: valueMonth.endOf('month').valueOf() }
+        // })
+
+        const numTicket = await TicketModel.aggregate([
+            {
+                $match: {
+                    createdAt: { $gte: valueMonth.startOf('month').valueOf(), $lte: valueMonth.endOf('month').valueOf() }
+                }
+            },
+            {
+                $group: {
+                    _id: null,
+                    totalSeats: { $sum: { $size: '$seat' } }
+                }
+            }
+        ]);
+
+        const numPrice = await TicketModel.aggregate([
+            {
+                $match: {
+                    createdAt: { $gte: valueMonth.startOf('month').valueOf(), $lte: valueMonth.endOf('month').valueOf() }
+                }
+            },
+            {
+                $group: {
+                    _id: null,
+                    totalPrice: { $sum: '$price' }
+                }
+            }
+        ]);
 
         return {
             numRegiter,
             numLogin,
-            numTicket,
+            numTicket: numTicket[0]?.totalSeats || 0,
+            numPrice: numPrice[0]?.totalPrice || 0,
             date: valueMonth.format("MM/YYYY")
         }
     }
