@@ -74,7 +74,7 @@ export default class UserService {
       }
       return {
         status,
-        userInfo,
+        userInfo: new UserInfo(userInfo),
       };
     } catch (error) {
       return {

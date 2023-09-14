@@ -42,7 +42,7 @@ userRouter.post(
   Endpoint.GET_USER_BY_ID,
   asyncHandler(async (req, res) => {
     const user = await userService.getUserById(`${req.query.id}`);
-    return res.json(user);
+    return res.json(new UserInfo(user));
   })
 );
 
