@@ -4,7 +4,7 @@ export const userTableName = 'User';
 interface IUserSchema extends Model<UserInfoDoc> {}
 
 export interface UserInfoDoc extends UserInfo, Document {
-  _id: string;
+  id: string;
 }
 
 const UserSchema = new mongoose.Schema<UserInfoDoc, IUserSchema>(

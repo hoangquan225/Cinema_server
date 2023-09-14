@@ -64,6 +64,7 @@ class ScheduleServices {
         .skip(skip)
         .limit(limit)
         .populate('filmId')
+        .sort({showDate: 1})
 
       const count = await ScheduleModel.countDocuments(query)
 

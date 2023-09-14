@@ -22,6 +22,15 @@ ticketRouter.post(
 );
 
 ticketRouter.post(
+  Endpoint.DELETE_TICKET,
+  asyncHandler(async (req, res) => {
+    const { ticketId } = req.query;
+    const { data, status } = await ticketService.deleteTicket(ticketId);
+    return res.json({ data, status });
+  })
+);
+
+ticketRouter.post(
   Endpoint.GET_ALL_TICKET,
   asyncHandler(async (req, res) => {
     const { limit = 50, skip = 0, filmId, userId, scheduleId } = req.query;

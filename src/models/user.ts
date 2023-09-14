@@ -1,7 +1,7 @@
 import AppConfig from '../common/config';
 
 class UserInfo {
-  _id?: string;
+  id?: string;
   // account: string;
   password: string;
   name: string;
@@ -26,7 +26,7 @@ class UserInfo {
     if (!args) {
       args = {};
     }
-    this._id = args._id ?? undefined;
+    this.id = args?._id ?? args.id ?? undefined;
     // this.account = args.account ?? '';
     this.name = args.name ?? '';
     this.avatar = args.avatar ?? '';
