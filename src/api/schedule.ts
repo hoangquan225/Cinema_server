@@ -25,11 +25,12 @@ scheduleRouter.post(
 scheduleRouter.post(
   Endpoint.GET_SCHEDULE,
   asyncHandler(async (req, res) => {
-    const { limit = 100, skip = 0, filmId } = req.query;
+    const { limit = 100, skip = 0, filmId, isAll = false } = req.query;
     const { data, count } = await scheduleService.getSchedule({
       limit: Number(limit),
       skip: Number(skip),
-      filmId: filmId
+      filmId: filmId,
+      isAll
     });
     return res.json({
       data,
