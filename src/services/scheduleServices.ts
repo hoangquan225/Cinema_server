@@ -50,17 +50,20 @@ class ScheduleServices {
     }
   };
 
-  getSchedule = async (body: { limit: number; skip: number, filmId?: any }) => {
+  getSchedule = async (body: { limit: number; skip: number, filmId?: any, isAll?: any }) => {
     try {
-      const { limit, skip, filmId } = body;
-      const query: any = {};
+      const { limit, skip, filmId, isAll } = body;
+      const query: any = { };
+
+      if(!isAll) {
+        query.showDate = { $gt: Date.now() } ;
+      }
 
       if (filmId !== undefined && filmId.length !== 0) {
         query.filmId = filmId;
       }
-
+      
       const schedules = await ScheduleModel.find(query)
-        .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit)
         .populate('filmId')
