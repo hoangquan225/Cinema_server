@@ -5,7 +5,7 @@ import { UserInfo } from '../models/user';
 import UserService from '../services/userServices';
 import { isValidObjectId } from 'mongoose';
 import { BadRequestError } from '../utils/errors';
-import { authMiddleware } from '../middleware/authMiddlewares';
+import { authMiddleware, isAdmin } from '../middleware/authMiddlewares';
 import crypto from 'crypto';
 
 const userRouter = express.Router();
@@ -30,6 +30,20 @@ userRouter.post(
 );
 
 userRouter.post(
+  Endpoint.UPDATE_STATUS_USER,
+  authMiddleware,
+  isAdmin,
+  asyncHandler(async (req: any, res) => {
+    const body = req.body;
+    const { status, userInfo } = await userService.updateStatusUser(body);
+    return res.json({
+      status,
+      userInfo,
+    });
+  })
+);
+
+userRouter.post(
   Endpoint.GET_USER_FROM_TOKEN,
   asyncHandler(async (req, res) => {
     const { token } = <{ token: string }>req.body;
@@ -43,6 +57,14 @@ userRouter.post(
   asyncHandler(async (req, res) => {
     const user = await userService.getUserById(`${req.query.id}`);
     return res.json(new UserInfo(user));
+  })
+);
+
+userRouter.post(
+  Endpoint.GET_ALL_USER,
+  asyncHandler(async (req, res) => {
+    const {data, status} = await userService.getAllUser();
+    return res.json({data, status} );
   })
 );
 

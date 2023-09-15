@@ -23,6 +23,15 @@ scheduleRouter.post(
 );
 
 scheduleRouter.post(
+  Endpoint.DELETE_SCHEDULE,
+  asyncHandler(async (req, res) => {
+    const { scheduleId } = req.query;
+    const { data, status } = await scheduleService.deleteSchedule(scheduleId);
+    return res.json({ data, status });
+  })
+);
+
+scheduleRouter.post(
   Endpoint.GET_SCHEDULE,
   asyncHandler(async (req, res) => {
     const { limit = 100, skip = 0, filmId, isAll = false } = req.query;

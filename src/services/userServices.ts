@@ -30,6 +30,32 @@ export default class UserService {
     return resetToken;
   };
 
+  updateStatusUser = async (
+    body: {userId: string, status: number}
+  ) => {
+    try {
+      const { userId, status} = body
+      
+      const userUpdate = await UserModel.findOneAndUpdate(
+        { _id: userId },
+        { status: status },
+        { new: true }
+      );
+      console.log({userUpdate});
+
+      const userInfo = new UserInfo(userUpdate);
+      return {
+        status: AppConfig.STATUS_SUCCESS,
+        userInfo,
+      };
+    } catch (err) {
+      return {
+        status: AppConfig.STATUS_FAIL,
+        userInfo: null,
+      };
+    }
+  };
+
   updateUserInfo = async (
     body: UserInfo,
     idUser: string
@@ -131,6 +157,18 @@ export default class UserService {
     try {
       const userInfo = await UserModel.findOne({ _id: userId });
       return new UserInfo(userInfo);
+    } catch (error) {
+      throw new BadRequestError();
+    }
+  };
+
+  getAllUser = async () => {
+    try {
+      const users = await UserModel.find({ });
+      return {
+        data: users.map((user) => new UserInfo(user)),
+        status: AppConfig.STATUS_SUCCESS
+      };
     } catch (error) {
       throw new BadRequestError();
     }

@@ -19,7 +19,7 @@ const sendEmail = async (email: string, subject: string, html: string) => {
     secure: false,
     auth: {
       user: EMAIL_ADDRESS,
-      pass: 'mlswlxneayjhseer',
+      pass: 'ffjbvkshtkmqmscv',
     },
   });
 

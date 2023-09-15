@@ -79,6 +79,7 @@ class AuthServices {
       // luu vao db
       const newUserInfo = {
         ...userInfo,
+        email,
         password: passEncode,
         registerDate: Date.now(),
         status: AppConfig.UserStatus.NORMAL,
