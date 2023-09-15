@@ -80,6 +80,20 @@ class ScheduleServices {
     }
   };
 
+  deleteSchedule = async (scheduleId: any) => {
+    try {
+      const deleteSchedule = await ScheduleModel.findOneAndDelete({
+        _id: scheduleId
+      });
+      return {
+        data: deleteSchedule,
+        status: deleteSchedule ? AppConfig.STATUS_SUCCESS : AppConfig.STATUS_FAIL ,
+      };
+    } catch (error) {
+      throw new BadRequestError();
+    }
+  };
+
   isOverlap = async (showDate, showTime, filmId) => {
     const scheduleList = await ScheduleModel.find()
     for (const existingSchedule of scheduleList) {
