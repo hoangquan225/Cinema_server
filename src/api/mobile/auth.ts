@@ -47,11 +47,12 @@ router.post("/session", jwtMiddleware, asyncHandler(async (req, res) => {
 
 router.post("/register", asyncHandler(async (req, res) => {
     console.log("/register");
-    const { password, email, phoneNumber, gender, reTypePassword, name } = req.body as Partial<UserInfo> & { reTypePassword?: string }
+    const { password, email, phoneNumber, gender, name } = req.body as Partial<UserInfo> & { reTypePassword?: string }
+    // const { password, email, phoneNumber, gender, reTypePassword, name } = req.body as Partial<UserInfo> & { reTypePassword?: string }
     if (!password || !email || !phoneNumber || !gender || !name) {
         return res.status(400).json("params is not valid")
     }
-    if (reTypePassword && reTypePassword !== password) return res.status(400).json("params is not valid")
+    // if (reTypePassword && reTypePassword !== password) return res.status(400).json("params is not valid")
 
     const isExistUser = await UserModel.exists({
         $or: [
