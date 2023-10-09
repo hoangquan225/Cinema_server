@@ -79,7 +79,7 @@ router.post("/user", jwtMiddleware, asyncHandler(async (req, res) => {
     const { _id } = req.body;
     const user = await UserModel.findOne({ _id });
 
-    return res.json(user)
+    return res.json({data: user, status: 0})
 }))
 
 router.post("/update-user", asyncHandler(async (req, res) => {
