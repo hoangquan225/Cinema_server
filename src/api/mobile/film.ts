@@ -25,7 +25,7 @@ router.post("/get-film-by-id", asyncHandler(async (req, res) => {
     
     const id = `${req.body.filmId}`
     const data = await filmServices.getFilmById(id)
-    return res.json(data)
+    return res.json({ data, status: 0 })
 }))
 
 export { router as filmMobileRouter }
