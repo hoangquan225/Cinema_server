@@ -11,9 +11,19 @@ router.get("/get-film-by-id", asyncHandler(async (req, res) => {
         data: 'cannot find param categoryid',
         status: -1
     })
-    console.log(req.query.filmId);
+    console.log("/get-film-by-id| " + req.query.filmId);
     
     const id = `${req.query.filmId}`
+    const data = await filmServices.getFilmById(id)
+    return res.json(data)
+}))
+
+
+router.post("/get-film-by-id", asyncHandler(async (req, res) => {
+ 
+    console.log({"get-film-by-id": req.body});
+    
+    const id = `${req.body.filmId}`
     const data = await filmServices.getFilmById(id)
     return res.json(data)
 }))
