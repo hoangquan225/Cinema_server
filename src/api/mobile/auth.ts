@@ -36,7 +36,8 @@ router.post("/login", asyncHandler(async (req, res) => {
 
     return res.json({
         status: AppConfig.STATUS_SUCCESS,
-        token
+        token,
+        userId: user._id
     })
 }))
 
@@ -71,7 +72,8 @@ router.post("/register", asyncHandler(async (req, res) => {
     const token = jwtEncode(registerUser._id);
     return res.json({
         status: AppConfig.STATUS_SUCCESS,
-        token
+        token,
+        userId: registerUser._id
     })
 }))
 
