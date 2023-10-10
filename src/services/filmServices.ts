@@ -94,8 +94,8 @@ class FilmServices {
         .populate('filmId')
         .sort({showDate: 1})
 
-        let data = schedules.map(e =>({id: e._id, showDate: e.showDate}))
-
+      let data = schedules.map(e =>({id: e._id, showDate: e.showDate, nSeat: e.nSeat}))
+      
       return data
     } catch (error) {
       throw new BadRequestError();
