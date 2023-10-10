@@ -28,4 +28,12 @@ router.post("/get-film-by-id", asyncHandler(async (req, res) => {
     return res.json({ data, status: 0 })
 }))
 
+router.post("/get-schedule", asyncHandler(async (req, res) => {
+    console.log({"get-schedule": req.body});
+
+    const id = `${req.body.filmId}`
+    const data = await filmServices.getSchedule({ filmId:id, isAll: false })
+    return res.json({ data, status: 0 })
+}))
+
 export { router as filmMobileRouter }

@@ -3,6 +3,7 @@ import { BadRequestError, FailureError } from '../utils/errors';
 import { FilmModel } from '../database/film';
 import { Film } from '../models/film';
 import { LIMIT } from '../utils/constant';
+import { ScheduleModel } from '../database/schedule';
 
 class FilmServices {
   public isAllowRun: boolean = true;
@@ -70,6 +71,32 @@ class FilmServices {
         throw new FailureError('Film not found');
       }
       return film;
+    } catch (error) {
+      throw new BadRequestError();
+    }
+  };
+
+  // API mobile get Schedule
+  getSchedule = async (body: { filmId: any, isAll?: any }) => {
+    try {
+      const {filmId, isAll } = body;
+      const query: any = { };
+
+      if(!isAll) {
+        query.showDate = { $gt: Date.now() } ;
+      }
+
+      if (filmId !== undefined && filmId.length !== 0) {
+        query.filmId = filmId;
+      }
+      
+      const schedules = await ScheduleModel.find(query)
+        .populate('filmId')
+        .sort({showDate: 1})
+
+        let data = schedules.map(e =>({id: e._id, showDate: e.showDate}))
+
+      return data
     } catch (error) {
       throw new BadRequestError();
     }
