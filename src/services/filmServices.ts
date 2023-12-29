@@ -3,6 +3,7 @@ import { BadRequestError, FailureError } from '../utils/errors';
 import { FilmModel } from '../database/film';
 import { Film } from '../models/film';
 import { LIMIT } from '../utils/constant';
+import { ScheduleModel } from '../database/schedule';
 
 class FilmServices {
   public isAllowRun: boolean = true;
@@ -62,6 +63,8 @@ class FilmServices {
   };
 
   getFilmById = async (filmId: string) => {
+    console.log("/get-film-by-id| " +filmId);
+
     try {
       const film = await FilmModel.findById(filmId);
       if (!film) {
@@ -73,7 +76,34 @@ class FilmServices {
     }
   };
 
+  // API mobile get Schedule
+  getSchedule = async (body: { filmId: any, isAll?: any }) => {
+    try {
+      const {filmId, isAll } = body;
+      const query: any = { };
+
+      if(!isAll) {
+        query.showDate = { $gt: Date.now() } ;
+      }
+
+      if (filmId !== undefined && filmId.length !== 0) {
+        query.filmId = filmId;
+      }
+      
+      const schedules = await ScheduleModel.find(query)
+        .populate('filmId')
+        .sort({showDate: 1})
+
+      let data = schedules.map(e =>({id: e._id, showDate: e.showDate, nSeat: e.nSeat}))
+      
+      return data
+    } catch (error) {
+      throw new BadRequestError();
+    }
+  };
+
   getAllFilm = async (body: { limit: number; skip: number; status: number }) => {
+    console.log("/getAllFilm ");
     try {
       const { limit, skip, status } = body;
       let films

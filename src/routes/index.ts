@@ -6,7 +6,6 @@ import { ticketRouter } from '../api/ticket';
 import { uploadRouter } from '../api/upload';
 import { statisticRouter } from '../api/statistic';
 import { scheduleRouter } from '../api/schedule';
-import { testRouter } from '../api/apiTestApp';
 
 const router = Router();
 
@@ -18,7 +17,5 @@ router.use(scheduleRouter);
 
 router.use(uploadRouter);
 router.use(statisticRouter);
-
-router.use(testRouter);
 
 export { router as webRouters };

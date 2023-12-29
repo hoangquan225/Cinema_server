@@ -6,6 +6,7 @@ import dotenv from "./src/utils/dotenv";
 import logger from "./src/utils/logger";
 import connectDatabase from "./src/utils/mongodb";
 import { webRouters } from "./src/routes/index";
+import { RouterMobile } from "./src/api/mobile";
 // import { initSocket } from './src/socket';
 // import discordApp from './src/discord/modules/discord'
 
@@ -47,6 +48,7 @@ class App {
   private useAPI() {
     // Web
     this.app.use(PREFIX_API, webRouters);
+    this.app.use("/api-mobile", RouterMobile);
   }
   run() {
     connectDatabase(() => {
