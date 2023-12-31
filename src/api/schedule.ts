@@ -5,6 +5,7 @@ import { BadRequestError } from '../utils/errors';
 import AppConfig from '../common/config';
 import { ScheduleServices } from '../services/scheduleServices';
 import { Schedule } from '../models/schedule';
+import { authMiddleware } from '../middleware/authMiddlewares';
 
 const scheduleRouter = express.Router();
 
@@ -33,13 +34,15 @@ scheduleRouter.post(
 
 scheduleRouter.post(
   Endpoint.GET_SCHEDULE,
+  authMiddleware,
   asyncHandler(async (req, res) => {
-    const { limit = 100, skip = 0, filmId, isAll = false } = req.query;
+    const { limit = 100, skip = 0, filmId, isAll = false, theater } = req.query;
     const { data, count } = await scheduleService.getSchedule({
       limit: Number(limit),
       skip: Number(skip),
       filmId: filmId,
-      isAll
+      isAll,
+      theater: theater
     });
     return res.json({
       data,

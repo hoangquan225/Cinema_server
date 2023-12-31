@@ -20,6 +20,7 @@ const ScheduleSchema = new mongoose.Schema<IScheduleDocument, IScheduleISchema>(
         startTime: Number,
         endTime: Number,
         nSeat: Number,
+        theater: Number,
         createdAt: Number
     },
     {

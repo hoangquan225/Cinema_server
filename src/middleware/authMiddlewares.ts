@@ -20,10 +20,8 @@ const authMiddleware = asyncHandler(async (req: any, res, next: any) => {
     // return next(new UnauthorizedError('Token Invalid'));
     throw res.json(new UnauthorizedError('Token Invalid'));
 
-  // 2) verification token
   const decode = jwtDecodeToken(token);
   if (decode) {
-    // 3) check if user still exists
     const currentUser = await UserModel.findById(decode._id);
     if (!currentUser)
       return next(
@@ -56,9 +54,9 @@ const authMiddleware = asyncHandler(async (req: any, res, next: any) => {
 //       const decodedToken = await jwtDecodeToken(token);
 //       next();
 //     } catch (error) {
-//       if (_.get(error, 'name', '') === 'TokenExpiredError') {
-//         throw new UnauthorizedError('Token Expired');
-//       }
+//       // if (_.get(error, 'name', '') === 'TokenExpiredError') {
+//       //   throw new UnauthorizedError('Token Expired');
+//       // }
 //       throw new UnauthorizedError('Unauthorized');
 //     }
 //   }

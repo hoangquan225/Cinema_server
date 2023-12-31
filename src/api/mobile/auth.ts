@@ -13,8 +13,6 @@ const router = Router();
 
 router.post("/login", asyncHandler(async (req, res) => {
     const { email, password } = req.body
-    console.log("/login");
-    
     const user = await UserModel.findOne({ email, status: AppConfig.STATUS_PUBLIC })
     if (!user) {
         return res.status(200).json({
@@ -42,12 +40,10 @@ router.post("/login", asyncHandler(async (req, res) => {
 }))
 
 router.post("/session", jwtMiddleware, asyncHandler(async (req, res) => {
-    console.log("/session");
     return res.status(200).json({})
 }))
 
 router.post("/register", asyncHandler(async (req, res) => {
-    console.log("/register");
     const { password, email, phoneNumber, gender, name } = req.body as Partial<UserInfo> & { reTypePassword?: string }
     // const { password, email, phoneNumber, gender, reTypePassword, name } = req.body as Partial<UserInfo> & { reTypePassword?: string }
     if (!password || !email || !phoneNumber || !gender || !name) {
@@ -78,7 +74,6 @@ router.post("/register", asyncHandler(async (req, res) => {
 }))
 
 router.post("/user", jwtMiddleware, asyncHandler(async (req, res) => {
-    console.log("/user");
     const { _id } = req.body;
     const user = await UserModel.findOne({ _id });
 
@@ -86,7 +81,6 @@ router.post("/user", jwtMiddleware, asyncHandler(async (req, res) => {
 }))
 
 router.post("/update-user", asyncHandler(async (req, res) => {
-    console.log("/update-user");
     const { _id, password, ...updateFeild } = req.body;
     let _password: string | null = "";
     const user = await UserModel.findOne({ _id })

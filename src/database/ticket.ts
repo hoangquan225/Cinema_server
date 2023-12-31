@@ -25,6 +25,7 @@ const TicketSchema = new mongoose.Schema<ITicketDocument, ITicketISchema>(
     // showTime: { type: Number, required: true }, // ngay, gio chieu phim
     showDate: Number,
     showTime: String,
+    theater: Number,
     price: Number,
     paid: { type: Boolean, default: false },
     createdAt: Number,

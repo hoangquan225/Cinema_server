@@ -41,7 +41,6 @@ export default class UserService {
         { status: status },
         { new: true }
       );
-      console.log({userUpdate});
 
       const userInfo = new UserInfo(userUpdate);
       return {

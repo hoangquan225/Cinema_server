@@ -23,25 +23,18 @@ router.get("/get-film-by-id", asyncHandler(async (req, res) => {
 
 
 router.post("/get-film-by-id", asyncHandler(async (req, res) => {
- 
-    console.log({"get-film-by-id": req.body});
-    
     const id = `${req.body.filmId}`
     const data = await filmServices.getFilmById(id)
     return res.json({ data, status: 0 })
 }))
 
 router.post("/get-schedule", asyncHandler(async (req, res) => {
-    console.log({"get-schedule": req.body});
-
     const id = `${req.body.filmId}`
     const data = await filmServices.getSchedule({ filmId:id, isAll: false })
     return res.json({ data, status: 0 })
 }))
 
 router.post("/get-seat-of-schedule", asyncHandler(async (req, res) => {
-    console.log({"get-seat-of-schedule": req.body});
-
     const scheduleId = `${req.body.scheduleId}`
     const showTime = `${req.body.showTime}`
     const filmId = `${req.body.filmId}`

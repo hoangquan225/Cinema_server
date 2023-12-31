@@ -63,8 +63,6 @@ class FilmServices {
   };
 
   getFilmById = async (filmId: string) => {
-    console.log("/get-film-by-id| " +filmId);
-
     try {
       const film = await FilmModel.findById(filmId);
       if (!film) {
@@ -103,7 +101,6 @@ class FilmServices {
   };
 
   getAllFilm = async (body: { limit: number; skip: number; status: number }) => {
-    console.log("/getAllFilm ");
     try {
       const { limit, skip, status } = body;
       let films

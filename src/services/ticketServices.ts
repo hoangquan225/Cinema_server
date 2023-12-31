@@ -1,3 +1,4 @@
+import moment from 'moment';
 import AppConfig from '../common/config';
 import { TicketModel } from '../database/ticket';
 import { Ticket } from '../models/ticket';
@@ -6,6 +7,17 @@ import { BadRequestError } from '../utils/errors';
 class TicketServices {
   createTicket = async (body: Ticket) => {
     try {
+      const { scheduleId, showTime, filmId, theater, seat } = body;
+
+      const isOverlap = await this.isOverlapTicket(scheduleId, showTime, filmId, theater, seat);
+
+      if (isOverlap) {
+        return {
+          data: 'Vé tạo trùng lặp',
+          status: -1,
+        }
+      }
+
       const newTicket = await TicketModel.create({
         ...body,
         createdAt: Date.now(),
@@ -17,6 +29,14 @@ class TicketServices {
     } catch (error) {
       throw new BadRequestError();
     }
+  };
+
+  isOverlapTicket = async (scheduleId, showTime, filmId, theater, seatNumbers) => {
+    const arrSeat = await this.getSeatOfSchedule({filmId, scheduleId, showTime, theater})
+    if (seatNumbers.some((number) => arrSeat.includes(number))) {
+      return true
+    }
+    return false;
   };
 
   deleteTicket = async (ticketId: any) => {
@@ -33,9 +53,9 @@ class TicketServices {
     }
   };
 
-  getAllTicket = async (body: { limit: number; skip: number, filmId?: any, userId?: any, scheduleId?: any}) => {
+  getAllTicket = async (body: { limit: number; skip: number, filmId?: any, userId?: any, scheduleId?: any, theater?:any}) => {
     try {
-      const { limit, skip, filmId, userId, scheduleId } = body;
+      const { limit, skip, filmId, userId, scheduleId, theater } = body;
       const query: any = {};
       
       if (filmId !== undefined && filmId.length !== 0) {
@@ -47,6 +67,10 @@ class TicketServices {
 
       if (scheduleId !== undefined && scheduleId.length !== 0) {
         query.scheduleId = scheduleId;
+      }
+
+      if (theater !== undefined && theater.length !== 0) {
+        query.theater = theater;
       }
 
       const tickets = await TicketModel.find(query)
@@ -77,10 +101,10 @@ class TicketServices {
     }
   };
 
-  getSeatOfSchedule = async (body: { filmId: any; scheduleId: any, showTime: any }) => {
+  getSeatOfSchedule = async (body: { filmId: any; scheduleId: any, showTime: any, theater?: any }) => {
     try {
-      const { scheduleId, filmId, showTime } = body;
-      const tickets = await TicketModel.find({ scheduleId, showTime }); 
+      const { scheduleId, filmId, showTime, theater } = body;
+      const tickets = await TicketModel.find({ scheduleId, showTime, theater }); 
       const seatArray = tickets
         .map((ticket) => ticket.seat)
         .flat()
