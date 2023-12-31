@@ -5,11 +5,13 @@ import { BadRequestError } from '../utils/errors';
 import AppConfig from '../common/config';
 import { TicketServices } from '../services/ticketServices';
 import { Ticket } from '../models/ticket';
+import { authMiddleware } from '../middleware/authMiddlewares';
 
 const ticketRouter = express.Router();
 
 const ticketService = new TicketServices();
 
+ticketRouter.use(authMiddleware)
 ticketRouter.post(
   Endpoint.CREATE_TICKET,
   asyncHandler(async (req, res) => {
@@ -53,7 +55,7 @@ ticketRouter.post(
   Endpoint.GET_SEAT_OF_SCHEDULE_BY_TICKET,
   asyncHandler(async (req, res) => {
     const { filmId, scheduleId, showTime, theater } = req.query;
-    const data = await ticketService.getSeatOfSchedule({ filmId, scheduleId, showTime, theater});
+    const data = await ticketService.getSeatOfSchedule({ filmId, scheduleId, showTime, theater });
 
     return res.json({ data, status: AppConfig.STATUS_SUCCESS });
   })

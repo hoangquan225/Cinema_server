@@ -50,9 +50,9 @@ class ScheduleServices {
     }
   };
 
-  getSchedule = async (body: { limit: number; skip: number, filmId?: any, isAll?: any, theater?: any }) => {
+  getSchedule = async (body: { limit: number; skip: number, filmId?: any, isAll?: any, theater?: any, roomNum?: any  }) => {
     try {
-      const { limit, skip, filmId, isAll, theater } = body;
+      const { limit, skip, filmId, isAll, theater, roomNum } = body;
       const query: any = { };
 
       if(!isAll) {
@@ -65,6 +65,10 @@ class ScheduleServices {
 
       if (theater !== undefined && theater.length !== 0) {
         query.theater = theater;
+      }
+
+      if (roomNum !== undefined && roomNum.length !== 0) {
+        query.roomNum = roomNum;
       }
       
       const schedules = await ScheduleModel.find(query)
@@ -98,8 +102,8 @@ class ScheduleServices {
     }
   };
 
-  isOverlap = async (showDate, showTime, filmId, theater) => {
-    const scheduleList = await ScheduleModel.find({theater})
+  isOverlap = async (showDate, showTime, filmId, theater, roomNum) => {
+    const scheduleList = await ScheduleModel.find({theater, roomNum})
     for (const existingSchedule of scheduleList) {
       if (moment(existingSchedule.showDate).format("DD/MM/YYYY") === moment(showDate).format("DD/MM/YYYY")) {
         if (existingSchedule.showTime.some(element => showTime.includes(element))) {
@@ -113,12 +117,8 @@ class ScheduleServices {
 
   checkOverlapMiddleware = async (req, res, next) => {
     try {
-      const showTime = req.body.showTime;
-      const showDate = req.body.showDate;
-      const filmId = req.body.filmId;
-      const theater = req.body.theater;
-      
-      const isOverlap = await this.isOverlap(showDate, showTime, filmId, theater);
+      const { showTime, showDate, filmId, theater, roomNum } = req.body;
+      const isOverlap = await this.isOverlap(showDate, showTime, filmId, theater, roomNum);
       if (isOverlap) {
         return res.json({
           message: 'Lịch chiếu trùng lặp',

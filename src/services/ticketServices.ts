@@ -8,7 +8,6 @@ class TicketServices {
   createTicket = async (body: Ticket) => {
     try {
       const { scheduleId, showTime, filmId, theater, seat } = body;
-
       const isOverlap = await this.isOverlapTicket(scheduleId, showTime, filmId, theater, seat);
 
       if (isOverlap) {
@@ -32,7 +31,7 @@ class TicketServices {
   };
 
   isOverlapTicket = async (scheduleId, showTime, filmId, theater, seatNumbers) => {
-    const arrSeat = await this.getSeatOfSchedule({filmId, scheduleId, showTime, theater})
+    const arrSeat = await this.getSeatOfSchedule({filmId, scheduleId, showTime })
     if (seatNumbers.some((number) => arrSeat.includes(number))) {
       return true
     }
@@ -104,7 +103,7 @@ class TicketServices {
   getSeatOfSchedule = async (body: { filmId: any; scheduleId: any, showTime: any, theater?: any }) => {
     try {
       const { scheduleId, filmId, showTime, theater } = body;
-      const tickets = await TicketModel.find({ scheduleId, showTime, theater }); 
+      const tickets = await TicketModel.find({ scheduleId, showTime }); 
       const seatArray = tickets
         .map((ticket) => ticket.seat)
         .flat()

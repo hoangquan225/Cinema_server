@@ -11,6 +11,8 @@ const scheduleRouter = express.Router();
 
 const scheduleService = new ScheduleServices();
 
+scheduleRouter.use(authMiddleware)
+
 scheduleRouter.post(
   Endpoint.UPDATE_SCHEDULE, 
   scheduleService.checkOverlapMiddleware,
@@ -18,7 +20,6 @@ scheduleRouter.post(
     const { data, status } = await scheduleService.updateSchedule(
       new Schedule(req.body)
     );
-
     return res.json({ data, status });
   })
 );
@@ -34,15 +35,15 @@ scheduleRouter.post(
 
 scheduleRouter.post(
   Endpoint.GET_SCHEDULE,
-  authMiddleware,
   asyncHandler(async (req, res) => {
-    const { limit = 100, skip = 0, filmId, isAll = false, theater } = req.query;
+    const { limit = 100, skip = 0, filmId, isAll = false, theater, roomNum } = req.query;
     const { data, count } = await scheduleService.getSchedule({
       limit: Number(limit),
       skip: Number(skip),
       filmId: filmId,
       isAll,
-      theater: theater
+      theater: theater,
+      roomNum: roomNum
     });
     return res.json({
       data,

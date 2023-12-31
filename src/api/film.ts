@@ -11,9 +11,10 @@ const filmRouter = express.Router();
 
 const filmService = new FilmServices();
 
+filmRouter.use(authMiddleware)
+
 filmRouter.post(
   Endpoint.UPDATE_FILM,
-  // authMiddleware, isAdmin,
   asyncHandler(async (req, res) => {
     const { data, status } = await filmService.updateFilm(new Film(req.body));
 
