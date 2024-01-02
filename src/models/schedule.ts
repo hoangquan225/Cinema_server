@@ -1,6 +1,15 @@
 import { isObject } from "../utils/helpers";
 import { Film } from "./film";
 
+const theaterMapping = {
+    1: "Thanh Xuân",
+    2: "Long Biên",
+    3: "Royal City",
+    4: "Time City",
+    5: "Hà Đông",
+    6: "Giải Phóng"
+};
+
 class Schedule {
     id?: string | undefined;
     filmId: string | null;
@@ -13,6 +22,7 @@ class Schedule {
     nSeat: number;
     createdAt: number;
     theater: number; //1: Thanh xuan, 2: Long Bien, 3: Royal city, 4: Time City, 5: Ha Dong, 6: Giai Phong
+    theaterStr: string; //1: Thanh xuan, 2: Long Bien, 3: Royal city, 4: Time City, 5: Ha Dong, 6: Giai Phong
     roomNum: number; 
 
     constructor(args?: any) {
@@ -31,6 +41,7 @@ class Schedule {
         this.createdAt = args?.createdAt ?? 0;
         this.roomNum = args?.roomNum ?? null;
         this.theater = args?.theater ?? null;
+        this.theaterStr =  args?.theater in theaterMapping ? theaterMapping[args.theater] : null;
     }
 }
 
