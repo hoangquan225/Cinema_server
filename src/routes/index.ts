@@ -11,8 +11,9 @@ import { theaterRouter } from '../api/theater';
 const router = Router();
 
 router.use(authRouter);
-router.use(filmRouter);
 router.use(userRouter);
+
+router.use(filmRouter);
 router.use(ticketRouter);
 router.use(scheduleRouter);
 

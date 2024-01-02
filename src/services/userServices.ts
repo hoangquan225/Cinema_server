@@ -187,11 +187,12 @@ export default class UserService {
       'host'
     )}/api/user/reset-password/${resetToken}`;
 
-    const html = `<p>Here is the code to retrieve your password: <h1 style="color:#04aa6d;text-align:center;">${resetToken}</h1>Your password reset code valid for 5 minutes, Do not share it with anyone.</p>`;
+    const html = `<p>Here is the code to retrieve your password: <h1 style="color:#04aa6d;text-align:center;">${resetToken}</h1>Your password reset code valid for 5 minutes, Do not share it with anyone.</p>
+    <br><p>${resetURl}</p>`;
     try {
       await sendEmail(
         user.email,
-        'Your password reset token (valid for 5 min)',
+        'Thông báo từ Cinema (OTP reset password)',
         html
       );
 
