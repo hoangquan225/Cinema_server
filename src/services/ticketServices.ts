@@ -7,8 +7,8 @@ import { BadRequestError } from '../utils/errors';
 class TicketServices {
   createTicket = async (body: Ticket) => {
     try {
-      const { scheduleId, showTime, filmId, theater, seat } = body;
-      const isOverlap = await this.isOverlapTicket(scheduleId, showTime, filmId, theater, seat);
+      const { scheduleId, showTime, filmId, seat } = body;
+      const isOverlap = await this.isOverlapTicket(scheduleId, showTime, filmId, seat);
 
       if (isOverlap) {
         return {
@@ -30,7 +30,7 @@ class TicketServices {
     }
   };
 
-  isOverlapTicket = async (scheduleId, showTime, filmId, theater, seatNumbers) => {
+  isOverlapTicket = async (scheduleId, showTime, filmId, seatNumbers) => {
     const arrSeat = await this.getSeatOfSchedule({filmId, scheduleId, showTime })
     if (seatNumbers.some((number) => arrSeat.includes(number))) {
       return true
@@ -66,10 +66,6 @@ class TicketServices {
 
       if (scheduleId !== undefined && scheduleId.length !== 0) {
         query.scheduleId = scheduleId;
-      }
-
-      if (theater !== undefined && theater.length !== 0) {
-        query.theater = theater;
       }
 
       const tickets = await TicketModel.find(query)
