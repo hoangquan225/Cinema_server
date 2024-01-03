@@ -102,12 +102,12 @@ class ScheduleServices {
     }
   };
 
-  isOverlap = async (showDate, showTime, filmId, theater, roomNum) => {
+  isOverlap = async (showDate, showTime, filmId, theater, roomNum, id) => {
     const scheduleList = await ScheduleModel.find({theater, roomNum})
     for (const existingSchedule of scheduleList) {
       if (moment(existingSchedule.showDate).format("DD/MM/YYYY") === moment(showDate).format("DD/MM/YYYY")) {
         if (existingSchedule.showTime.some(element => showTime.includes(element))) {
-          if(existingSchedule.filmId?.toString() === filmId) return false
+          if(existingSchedule.filmId?.toString() === filmId && id) return false
           else return true;
         }
       }
@@ -117,8 +117,8 @@ class ScheduleServices {
 
   checkOverlapMiddleware = async (req, res, next) => {
     try {
-      const { showTime, showDate, filmId, theater, roomNum } = req.body;
-      const isOverlap = await this.isOverlap(showDate, showTime, filmId, theater, roomNum);
+      const { showTime, showDate, filmId, theater, roomNum, id } = req.body;
+      const isOverlap = await this.isOverlap(showDate, showTime, filmId, theater, roomNum, id);
       if (isOverlap) {
         return res.json({
           message: 'Lịch chiếu trùng lặp',

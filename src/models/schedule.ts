@@ -20,7 +20,6 @@ class Schedule {
     startTime: number;
     endTime: number;
     nSeat: number;
-    createdAt: number;
     theater: number; //1: Thanh xuan, 2: Long Bien, 3: Royal city, 4: Time City, 5: Ha Dong, 6: Giai Phong
     theaterStr: string; //1: Thanh xuan, 2: Long Bien, 3: Royal city, 4: Time City, 5: Ha Dong, 6: Giai Phong
     roomNum: number; 
@@ -38,7 +37,6 @@ class Schedule {
         this.startTime = args?.startTime ?? 0;
         this.endTime = args?.endTime ?? 0;
         this.nSeat = args?.nSeat ?? 0;
-        this.createdAt = args?.createdAt ?? 0;
         this.roomNum = args?.roomNum ?? null;
         this.theater = args?.theater ?? null;
         this.theaterStr =  args?.theater in theaterMapping ? theaterMapping[args.theater] : null;

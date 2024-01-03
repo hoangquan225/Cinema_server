@@ -5,7 +5,7 @@ import { BadRequestError } from '../utils/errors';
 import AppConfig from '../common/config';
 import { ScheduleServices } from '../services/scheduleServices';
 import { Schedule } from '../models/schedule';
-import { authMiddleware } from '../middleware/authMiddlewares';
+import { authMiddleware, isAdmin } from '../middleware/authMiddlewares';
 
 const scheduleRouter = express.Router();
 
@@ -14,7 +14,8 @@ const scheduleService = new ScheduleServices();
 scheduleRouter.use(authMiddleware)
 
 scheduleRouter.post(
-  Endpoint.UPDATE_SCHEDULE, 
+  Endpoint.UPDATE_SCHEDULE,
+  isAdmin,
   scheduleService.checkOverlapMiddleware,
   asyncHandler(async (req, res) => {
     const { data, status } = await scheduleService.updateSchedule(

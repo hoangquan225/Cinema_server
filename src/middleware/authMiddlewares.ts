@@ -66,7 +66,7 @@ const isAdmin = asyncHandler(async (req: any, res, next: any) => {
   const { email } = req.user;
   const adminUser = new UserInfo(await UserModel.findOne({ email }));
   if (adminUser.userRole !== 0) {
-    throw new Error('You are not an Admin');
+    throw res.json(new UnauthorizedError('You are not an Admin'));
   } else {
     next();
   }

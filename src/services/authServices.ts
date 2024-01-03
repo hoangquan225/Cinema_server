@@ -14,10 +14,10 @@ class AuthServices {
   //   return encodedPassword;
   // }
 
-  private createToken(user: UserInfo) {
+  private generateAccessToken(user: UserInfo) {
     let userInfo = new UserInfo(user);
     userInfo.loginCode = AppConfig.LOGIN_SUCCESS;
-    userInfo.token = jwtEncode(userInfo?.id, 60 * 60 * 24 * 30);
+    userInfo.token = jwtEncode(userInfo?.id, 60 * 60 * 24);
 
     return userInfo;
   }
@@ -41,7 +41,7 @@ class AuthServices {
         if (passEncode === checkUserAcc.password) {
           userInfo = new UserInfo(checkUserAcc);
           userInfo.loginCode = AppConfig.LOGIN_SUCCESS;
-          userInfo.token = jwtEncode(userInfo?.id, 60 * 60 * 24 * 30);
+          userInfo.token = jwtEncode(userInfo?.id, 60 * 60 * 24);
           // update lastLogin
         } else {
           userInfo.loginCode = AppConfig.LOGIN_WRONG_PASSWORD;
@@ -87,7 +87,7 @@ class AuthServices {
       };
       const newUser = await UserModel.create(newUserInfo);
       return {
-        ...this.createToken(newUser),
+        ...this.generateAccessToken(newUser),
         loginCode: AppConfig.LOGIN_SUCCESS,
         message: 'LOGIN_SUCCESS',
       };

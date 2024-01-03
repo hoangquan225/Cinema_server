@@ -21,8 +21,7 @@ const ScheduleSchema = new mongoose.Schema<IScheduleDocument, IScheduleISchema>(
         endTime: Number,
         nSeat: Number,
         theater: Number,
-        roomNum: Number,
-        createdAt: Number
+        roomNum: Number
     },
     {
         versionKey: false,
